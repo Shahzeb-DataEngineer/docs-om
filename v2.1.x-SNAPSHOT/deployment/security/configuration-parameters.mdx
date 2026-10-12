@@ -412,7 +412,7 @@ When email-first identity is on:
 - Deactivated accounts can't sign in. OpenMetadata doesn't restore or update a deactivated (soft-deleted) user when their email appears in a token.
 - Unverified emails are rejected. An OIDC token that explicitly has `email_verified: false` is refused. A token without the claim is accepted.
 - OpenMetadata updates display names only when the provider sends one. A display name that a user customized in OpenMetadata isn't overwritten by a value built from their email.
-- Self-signup follows `allowedEmailRegistrationDomains` for OIDC, SAML, and LDAP.
+- Self-signup follows `allowedEmailRegistrationDomains` for OIDC and SAML. LDAP self-signup follows it on every deployment, as described in the next section.
 - `allowedEmailDomains` applies to tokens from your identity provider. Tokens issued by OpenMetadata itself, such as session tokens and personal access tokens, skip the check. This keeps the default admin and long-standing users signed in even if their email domain isn't on the list.
 
 ### Identity Provider Subject Binding
