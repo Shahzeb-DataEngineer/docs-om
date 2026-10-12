@@ -6611,6 +6611,8 @@
                 "pages": [
                   "v2.1.x-SNAPSHOT/api-reference/data-assets",
                   "v2.1.x-SNAPSHOT/api-reference/data-assets/databases-overview",
+                  "v2.1.x-SNAPSHOT/api-reference/data-assets/services-overview",
+                  "v2.1.x-SNAPSHOT/api-reference/data-assets/columns",
                   {
                     "group": "Api Collections",
                     "pages": [
@@ -6863,6 +6865,12 @@
                 ]
               },
               {
+                "group": "Collaboration",
+                "pages": [
+                  "v2.1.x-SNAPSHOT/api-reference/conversations"
+                ]
+              },
+              {
                 "group": "AI SDK",
                 "pages": [
                   "v2.1.x-SNAPSHOT/sdk/ai-sdk"
@@ -6878,6 +6886,15 @@
                     "pages": [
                       "v2.1.x-SNAPSHOT/api-reference/sdk/go",
                       "v2.1.x-SNAPSHOT/api-reference/sdk/go-api-methods"
+                    ]
+                  },
+                  {
+                    "group": "Java",
+                    "pages": [
+                      "v2.1.x-SNAPSHOT/api-reference/sdk/java",
+                      "v2.1.x-SNAPSHOT/api-reference/sdk/java/info",
+                      "v2.1.x-SNAPSHOT/api-reference/sdk/java/lineage",
+                      "v2.1.x-SNAPSHOT/api-reference/sdk/java/glossary-relations"
                     ]
                   },
                   {
