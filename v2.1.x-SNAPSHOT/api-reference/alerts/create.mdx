@@ -53,9 +53,9 @@ curl -X POST "https://your-company.open-metadata.org/api/v1/events/subscriptions
         "readTimeout": 12,
         "enabled": true,
         "config": {
-          "endpoint": "https://hooks.example.com/collate",
+          "endpoint": "https://hooks.example.com/openmetadata",
           "httpMethod": "POST",
-          "headers": { "X-Source": "collate" },
+          "headers": { "X-Source": "openmetadata" },
           "authType": { "type": "bearer", "secretKey": "<hmac-secret>" }
         }
       }
@@ -115,7 +115,7 @@ request = CreateEventSubscription(
             category=SubscriptionCategory.External,
             type=SubscriptionType.Webhook,
             config={
-                "endpoint": "https://hooks.example.com/collate",
+                "endpoint": "https://hooks.example.com/openmetadata",
                 "authType": {"type": "bearer", "secretKey": "<hmac-secret>"},
             },
         )
@@ -193,7 +193,7 @@ Returns the created alert. The response includes these fields:
     {
       "category": "External",
       "type": "Webhook",
-      "config": { "endpoint": "https://hooks.example.com/collate" }
+      "config": { "endpoint": "https://hooks.example.com/openmetadata" }
     }
   ]
 }
