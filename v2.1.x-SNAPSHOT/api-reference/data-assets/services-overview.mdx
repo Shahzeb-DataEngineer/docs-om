@@ -15,8 +15,8 @@ The response never includes a service connection configuration.
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `entityType` | string, repeatable | All service entity types | Defines the universe used for counts and results. |
-| `listEntityType` | string, repeatable | Requested `entityType` universe | Restricts `data` and `paging.total` without changing the count maps. |
+| `entityType` | string, repeatable | All service entity types | Service entity types to include in counts and results. |
+| `listEntityType` | string, repeatable | Requested `entityType` values | Restricts `data` and `paging.total` without changing the count maps. |
 | `serviceType` | string, repeatable | All connector types | Restricts `data` and `paging.total`, for example to `Snowflake`. |
 | `health` | string, repeatable | All health states | Restricts `data` and `paging.total`. One of `failed`, `partialSuccess`, `success`, or `notRun`. Implies `includeHealth=true`. |
 | `q` | string | None | Case-insensitive substring match on `name` and `displayName`. Also narrows all count maps. |
@@ -42,7 +42,7 @@ curl "{base_url}/api/v1/services/overview?entityType=databaseService&entityType=
 | `counts` | Count per service entity type. Reflects `entityType`, `include`, `domain`, `excludeProvider`, and `q`. |
 | `serviceTypeCounts` | Connector-type counts nested by service entity type. Uses the same filters as `counts`. |
 | `healthCounts` | Health-state counts nested by service entity type. Populated when health is requested. |
-| `total` | Sum of `counts` for the requested, authorized universe. |
+| `total` | Sum of `counts` for the requested service entity types the caller can view. |
 | `data` | Slim service summaries sorted together across service entity types. |
 | `paging.total` | Count after applying `listEntityType`, `serviceType`, and `health`. |
 
