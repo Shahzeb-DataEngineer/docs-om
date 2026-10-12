@@ -216,7 +216,7 @@ The domain that is associated with user accounts.
 Default: `"open-metadata.org"`
 
 <Note>
-**Deprecated.** Use [`botDomain`](#bot-domain-botdomain) for bot email addresses and [`allowedEmailDomains`](#allowed-email-domains-allowedemaildomains) to restrict which email domains can sign in.
+**Deprecated.** Use `botDomain` for bot email addresses and `allowedEmailDomains` to restrict which email domains can sign in.
 </Note>
 
 ## Authority (authority):
@@ -281,7 +281,7 @@ Indicates if SSL is enabled for connecting to the LDAP server. Defaults to `true
 Whether to enforce user principal matching with the defined principal domain
 
 <Note>
-**Deprecated.** Use [`allowedEmailDomains`](#allowed-email-domains-allowedemaildomains) instead.
+**Deprecated.** Use `allowedEmailDomains` instead.
 </Note>
 
 ## Enable Secure Socket Connection (enableSecureSocketConnection):
@@ -304,7 +304,7 @@ List of initial admin users for the system
 **Definition:** The JWT claims OpenMetadata uses to identify the authenticated user.
 
 <Note>
-**Deprecated.** Use [`emailClaim`](#email-claim-emailclaim) instead. This setting keeps working until email-first identity turns on, which happens when you set `emailClaim` without `jwtPrincipalClaimsMapping`.
+**Deprecated.** Use `emailClaim` instead. This setting keeps working until email-first identity turns on, which happens when you set `emailClaim` without `jwtPrincipalClaimsMapping`.
 </Note>
 
 For more information, see [Email-First User Identity](#email-first-user-identity).
@@ -394,7 +394,7 @@ cause the service to fail on startup with a validation error.
 
 Starting in 2.1, OpenMetadata can identify a signed-in user by their **email address** instead of resolving a username from several token claims. The email address becomes the single key for finding an existing account. OpenMetadata generates the username from the email. For example, `john.doe@company.com` becomes `john.doe`. If that name is already taken, OpenMetadata appends a random suffix, for example `john.doe_x7k2`.
 
-Email-first identity is opt-in. It turns on when you set [`emailClaim`](#email-claim-emailclaim) and have no `jwtPrincipalClaimsMapping` configured. Until then, OpenMetadata keeps using `jwtPrincipalClaims` as before, so upgrading without changing your configuration doesn't change how users are matched.
+Email-first identity is opt-in. It turns on when you set `emailClaim` and have no `jwtPrincipalClaimsMapping` configured. Until then, OpenMetadata keeps using `jwtPrincipalClaims` as before, so upgrading without changing your configuration doesn't change how users are matched.
 
 | Deprecated setting | Replace with |
 |---|---|
