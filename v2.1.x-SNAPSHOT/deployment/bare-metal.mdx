@@ -224,6 +224,8 @@ ELASTICSEARCH_PASSWORD='<ES_PASSWORD>'
 ELASTICSEARCH_CLUSTER_ALIAS='<clusterAlias>'
 ```
 
+OpenMetadata compresses request bodies sent to ElasticSearch or OpenSearch with gzip by default. To turn compression off, set `ELASTICSEARCH_REQUEST_COMPRESSION_ENABLED='false'`.
+
 ### Configure OpenSearch
 ```
 # ElasticSearch Configurations

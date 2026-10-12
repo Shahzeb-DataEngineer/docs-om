@@ -50,8 +50,10 @@ regex expression to filter tables.
 
 **Profile Sample (Optional)**
 Set the sample to be use by the profiler for the specific table.
-- `Percentage`: Value must be between 0 and 100 exclusive (0 < percentage < 100). This will sample the table based on a percentage
+- `Percentage`: Value must be between 1 and 100. This will sample the table based on a percentage
 - `Row Count`: The table will be sampled based on a number of rows (i.e. `1,000`, `2,000`), etc.
+
+A profile sample of `0` is not accepted. In the table profiler settings, the percentage and the row count must be at least `1`.
 
 ⚠️ This option is currently not support for Druid. Sampling leverage `RANDOM` functions in most database (some have specific sampling functions) and Druid provides neither of these option. We recommend using the partitioning or sample query option if you need to limit the amount of data scanned.
 
@@ -93,8 +95,10 @@ Once you have created your profiler you can adjust some behavior at the table le
 #### Profiler Options
 **Profile Sample**
 Set the sample to be use by the profiler for the specific table.
-- `Percentage`: Value must be between 0 and 100 exclusive (0 < percentage < 100). This will sample the table based on a percentage
+- `Percentage`: Value must be between 1 and 100. This will sample the table based on a percentage
 - `Row Count`: The table will be sampled based on a number of rows (i.e. `1,000`, `2,000`), etc.
+
+A profile sample of `0` is not accepted. In the table profiler settings, the percentage and the row count must be at least `1`.
 
 ⚠️ This option is currently not support for Druid. Sampling leverage `RANDOM` functions in most database (some have specific sampling functions) and Druid provides neither of these option. We recommend using the partitioning or sample query option if you need to limit the amount of data scanned.
 
