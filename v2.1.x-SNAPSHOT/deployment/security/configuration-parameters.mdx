@@ -390,7 +390,7 @@ cause the service to fail on startup with a validation error.
 
 ## Email-First User Identity
 
-Starting in 2.1, OpenMetadata can identify a signed-in user by their **email address** instead of resolving a username from several token claims. The email address becomes the single key for finding an existing account. The user name is generated from the email, for example `john.doe@company.com` becomes `john.doe`. If that name is already taken, OpenMetadata appends a random suffix, for example `john.doe_x7k2`.
+Starting in 2.1, OpenMetadata can identify a signed-in user by their **email address** instead of resolving a username from several token claims. The email address becomes the single key for finding an existing account. OpenMetadata generates the username from the email. For example, `john.doe@company.com` becomes `john.doe`. If that name is already taken, OpenMetadata appends a random suffix, for example `john.doe_x7k2`.
 
 Email-first identity is opt-in. It turns on when you set [`emailClaim`](#email-claim-emailclaim) and have no `jwtPrincipalClaimsMapping` configured. Until then, OpenMetadata keeps using `jwtPrincipalClaims` as before, so upgrading without changing your configuration doesn't change how users are matched.
 
@@ -408,10 +408,10 @@ The deprecated settings keep working. OpenMetadata logs a deprecation warning at
 
 When email-first identity is on:
 
-- Unknown emails are rejected, not guessed. If no account matches the email in the token, but another account already uses the same name as the start of that email, sign-in fails with a `401`. This stops an unregistered email from acting as another user.
+- OpenMetadata rejects unknown emails instead of guessing. If no account matches the email in the token, but another account already uses the same name as the start of that email, sign-in fails with a `401`. This stops an unregistered email from acting as another user.
 - Deactivated accounts can't sign in. OpenMetadata doesn't restore or update a deactivated (soft-deleted) user when their email appears in a token.
 - Unverified emails are rejected. An OIDC token that explicitly has `email_verified: false` is refused. A token without the claim is accepted.
-- Display names are only updated when the provider sends one. A display name that a user customized in OpenMetadata isn't overwritten by a value built from their email.
+- OpenMetadata updates display names only when the provider sends one. A display name that a user customized in OpenMetadata isn't overwritten by a value built from their email.
 - Self-signup follows `allowedEmailRegistrationDomains` for OIDC, SAML, and LDAP.
 - `allowedEmailDomains` applies to tokens from your identity provider. Tokens issued by OpenMetadata itself, such as session tokens and personal access tokens, skip the check. This keeps the default admin and long-standing users signed in even if their email domain isn't on the list.
 
@@ -449,8 +449,8 @@ These happen on upgrade to 2.1 whether or not you turn on email-first identity:
 
 - Stored emails become lowercase. The 2.1.0 migration lowercases every user email. Any script or integration that compares emails with case sensitivity sees the new values. No two users can collide because of this.
 - MySQL email matching ignores accents. `jose@x.com` and `josé@x.com` now match as the same address.
-- LDAP sign-in changes. Deactivated accounts can't sign in anymore. `allowedEmailRegistrationDomains` now applies to LDAP self-signup. A user name collision gets a generated suffix instead of failing. The display name is synced from the directory, which overwrites a display name the user customized in OpenMetadata.
-- `POST /v1/users` renames on a collision. For providers other than basic auth, a user name that is already taken gets a generated suffix instead of returning a conflict error.
+- LDAP sign-in changes. Deactivated accounts can't sign in anymore. `allowedEmailRegistrationDomains` now applies to LDAP self-signup. A username collision gets a generated suffix instead of failing. The display name is synced from the directory, which overwrites a display name the user customized in OpenMetadata.
+- `POST /v1/users` renames on a collision. For providers other than basic auth, a username that is already taken gets a generated suffix instead of returning a conflict error.
 
 ## Email Claim (emailClaim):
 **Definition**: The name of the token claim that holds the user's email address. Setting it turns on email-first identity, unless `jwtPrincipalClaimsMapping` is also configured.
