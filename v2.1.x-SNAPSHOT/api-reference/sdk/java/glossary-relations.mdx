@@ -12,6 +12,8 @@ Initialize the SDK client through `OM.init(client)` before using the static flue
 
 ## Discover Relation Types
 
+Use `GlossaryRelationTypes` to list, filter, and look up configured relation types:
+
 ```java
 import static org.openmetadata.sdk.fluent.GlossaryRelationTypes.*;
 
@@ -66,6 +68,8 @@ find(sourceTermId)
 `relateTo(...).apply()` defaults to the `relatedTo` type when `.as(...)` is omitted. `unrelateFrom(...).apply()` intentionally has a different default: it removes all relation types between the two terms.
 
 ## Read a Relation Graph
+
+Use `relations()` to traverse the relation graph from a term:
 
 ```java
 var graph = find(sourceTermId)

@@ -8,7 +8,7 @@ sidebarTitle: Conversations
 
 Conversation V2 uses explicit `Conversation` and `ConversationReply` schemas for discussions attached to metadata entities and fields.
 
-**Breaking change:** Clients that used `/v1/feed` must migrate. Human conversations now use `/v1/conversations`. Announcements, tasks, and generated activity use `/v1/announcements`, `/v1/tasks`, and `/v1/activity`. Update old feed clients to the matching resource endpoint and response schema.
+**Breaking change**: Clients that used `/v1/feed` must migrate. Human conversations now use `/v1/conversations`. Announcements, tasks, and generated activity use `/v1/announcements`, `/v1/tasks`, and `/v1/activity`. Update old feed clients to the matching resource endpoint and response schema.
 
 ## Endpoints
 
@@ -45,6 +45,8 @@ Reply listing uses `before`, `after`, and `limit`. Its default limit is `20` and
 The `{reactionType}` path parameter accepts `thumbsUp`, `thumbsDown`, `hooray`, `laugh`, `confused`, `heart`, `rocket`, or `eyes`.
 
 ### Create a Conversation
+
+Send a `POST` request with `message` and `about` to create a conversation:
 
 ```bash
 curl -X POST "{base_url}/api/v1/conversations" \

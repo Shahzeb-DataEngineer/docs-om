@@ -52,4 +52,6 @@ Health uses the worst terminal state among a service's latest ingestion-pipeline
 
 If any requested service type has more than 10,000 services, `healthCounts` is empty rather than approximate. Returned rows can still contain exact health values, but filtering by `health` is rejected for that request.
 
+### Authorization
+
 The endpoint removes service entity types on which the caller lacks `ViewBasic` before calculating counts or results. It returns an authorization error when none of the requested types are viewable.
