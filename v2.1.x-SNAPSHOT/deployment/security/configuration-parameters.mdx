@@ -304,8 +304,10 @@ List of initial admin users for the system
 **Definition:** The JWT claims OpenMetadata uses to identify the authenticated user.
 
 <Note>
-**Deprecated.** Use [`emailClaim`](#email-claim-emailclaim) instead. This setting keeps working until email-first identity turns on, which happens when you set `emailClaim` without `jwtPrincipalClaimsMapping`. For more information, see [Email-First User Identity](#email-first-user-identity).
+**Deprecated.** Use [`emailClaim`](#email-claim-emailclaim) instead. This setting keeps working until email-first identity turns on, which happens when you set `emailClaim` without `jwtPrincipalClaimsMapping`.
 </Note>
+
+For more information, see [Email-First User Identity](#email-first-user-identity).
 
 **Example:**
 
@@ -402,7 +404,7 @@ Email-first identity is opt-in. It turns on when you set [`emailClaim`](#email-c
 | `principalDomain` | `botDomain` for bots, `allowedEmailDomains` to restrict sign-in |
 | `enforcePrincipalDomain`, `allowedDomains` | `allowedEmailDomains` |
 
-Deprecated settings keep working until their replacement takes over. For `jwtPrincipalClaims`, that happens when you set `emailClaim`. OpenMetadata logs a deprecation warning at startup only after you configure the replacement.
+Deprecated settings keep working until their replacement takes over. For `jwtPrincipalClaims`, that happens when you set `emailClaim` and have no `jwtPrincipalClaimsMapping` configured. OpenMetadata logs a deprecation warning at startup only after you configure the replacement.
 
 ### What Email-First Identity Changes
 
@@ -410,7 +412,7 @@ When email-first identity is on:
 
 - OpenMetadata rejects unknown emails instead of guessing. If no account matches the email in the token, but another account already uses the same name as the start of that email, sign-in fails with a `401`. This stops an unregistered email from acting as another user.
 - Deactivated accounts can't sign in. OpenMetadata doesn't restore or update a deactivated (soft-deleted) user when their email appears in a token.
-- Unverified emails are rejected. An OIDC token that explicitly has `email_verified: false` is refused. A token without the claim is accepted.
+- OpenMetadata rejects unverified emails. It refuses an OIDC token that explicitly has `email_verified: false`. A token without the claim is accepted.
 - OpenMetadata updates display names only when the provider sends one. A display name that a user customized in OpenMetadata isn't overwritten by a value built from their email.
 - Self-signup follows `allowedEmailRegistrationDomains` for OIDC and SAML. LDAP self-signup follows it on every deployment, as described in [Changes That Apply to Every Deployment](#changes-that-apply-to-every-deployment).
 - `allowedEmailDomains` applies to tokens from your identity provider. Tokens issued by OpenMetadata itself, such as session tokens and personal access tokens, skip the check. This keeps the default admin and long-standing users signed in even if their email domain isn't on the list.
