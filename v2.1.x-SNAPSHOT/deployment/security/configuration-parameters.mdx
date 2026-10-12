@@ -302,7 +302,7 @@ List of initial admin users for the system
 
 ## JWT Principal Claims (jwtPrincipalClaims):
 <Note>
-**Deprecated.** Use [`emailClaim`](#email-claim-emailclaim) instead. This setting keeps working until you configure `emailClaim`. For more information, see [Email-First User Identity](#email-first-user-identity).
+**Deprecated.** Use [`emailClaim`](#email-claim-emailclaim) instead. This setting keeps working until email-first identity turns on, which happens when you set `emailClaim` without `jwtPrincipalClaimsMapping`. For more information, see [Email-First User Identity](#email-first-user-identity).
 </Note>
 
 **Definition:** The JWT claims OpenMetadata uses to identify the authenticated user.
