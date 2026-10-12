@@ -32,8 +32,8 @@ After you change a setting, click **Save**. Click **Reset** to discard your chan
 
 Use **App Mode** to choose the experience users of this persona see when they open the app and haven't picked an app mode themselves. A user's own app mode choice takes priority over the persona setting.
 
-- **No default**: Falls back to the organization default.
-- **Classic**: The standard catalog experience.
+- **No default**: Uses the organization default.
+- **Classic**: Uses the standard catalog experience.
 
 ### Default Landing Page
 
@@ -46,11 +46,17 @@ Use **Default Landing Page** to choose where users of this persona land when the
 
 <img src="/public/images/how-to-guides/admin-guide/persona-app-layout-landing-page.png" alt="Default Landing Page dropdown with pages grouped by section" />
 
-OpenMetadata sends users to this page only when the app first opens, such as after sign-in, after a page reload, or in a new browser tab. A deep link that a user opened before signing in takes priority. Later visits to the home page inside the app, such as clicking the logo, are not redirected.
+OpenMetadata sends users to this page when the app first opens. This happens after sign-in, after a page reload, or in a new browser tab. A deep link that a user opened before signing in takes priority. OpenMetadata doesn't redirect later visits to the home page inside the app, such as when a user clicks the logo.
 
 ### View Mode
 
-Use **View Mode** to set the starting view for pages that offer more than one layout. Pages without a setting open in **Table** view. To set a starting view, click **Add Page**, select a page, and choose its view:
+Use **View Mode** to set the starting view for pages that offer more than one layout. Pages without a setting open in **Table** view. To set a starting view:
+
+1. Click **Add Page**.
+2. Select a page.
+3. Choose its view.
+
+The following pages and views are available:
 
 - **Domains**: **Table**, **Grid**, or **Tree**.
 - **Sub Domains**: **Table** or **Grid**.
