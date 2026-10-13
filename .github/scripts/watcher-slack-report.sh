@@ -44,20 +44,61 @@ else
   detail=""
 fi
 
-body=""
+# The report file is a summary line plus one "<issue name><TAB><url>" row per
+# issue. Rows become a two-column table (issue name, linked issue number);
+# any other line is plain text.
+summary=""; rows=""
 if [ -n "$REPORT" ] && [ -s "$REPORT" ]; then
-  # Slack treats & < > as markup; the issue titles in this file are model-written.
-  body=$'\n\n'"$(sed -e 's/&/\&amp;/g' -e 's/</\&lt;/g' -e 's/>/\&gt;/g' "$REPORT")"
+  summary=$(grep -v $'\t' "$REPORT" || true)
+  rows=$(grep $'\t' "$REPORT" || true)
 elif [ "$failed" = "false" ]; then
-  body=$'\n\nNo issues created.'
+  summary="No issues created."
 fi
 
-link=""; [ -n "${RUN_URL:-}" ] && link=$'\n'"<${RUN_URL}|View run>"
-text="${head}${detail}${body}${link}"
+link_line=""; [ -n "${RUN_URL:-}" ] && link_line="<${RUN_URL}|View run>"
 
-if [ "${PRINT_ONLY:-}" = "1" ]; then printf '%s\n' "$text"; exit 0; fi
+# Slack treats & < > as markup, and issue titles are model-written.
+esc() { sed -e 's/&/\&amp;/g' -e 's/</\&lt;/g' -e 's/>/\&gt;/g'; }
+
+# Plain-text version: the notification preview, and the fallback for clients
+# that cannot render blocks.
+plain="${head}${detail}"
+[ -n "$summary" ] && plain="${plain}"$'\n\n'"$(esc <<< "$summary")"
+[ -n "$rows" ] && plain="${plain}"$'\n'"$(awk -F'\t' '{ n = $2; sub(/.*\//, "", n); print "• " $1 (n != "" ? " (#" n ")" : "") ($2 != "" ? ": " $2 : "") }' <<< "$rows" | esc)"
+[ -n "$link_line" ] && plain="${plain}"$'\n'"${link_line}"
+
+# Block Kit: header text, then the table as section "fields" (two per row,
+# at most 10 fields per section), then the run link.
+blocks=$(jq -n --arg head "${head}${detail}" --arg summary "$(esc <<< "$summary")" \
+    --arg link "$link_line" --arg rows "$rows" '
+  def cell($t): {type: "mrkdwn", text: $t};
+  def esc: gsub("&"; "&amp;") | gsub("<"; "&lt;") | gsub(">"; "&gt;");
+  ($rows | split("\n") | map(select(. != "") | split("\t"))) as $all
+  | ($all[0:100]) as $r
+  | ([ {type: "section", text: {type: "mrkdwn", text: ($head + (if $summary != "" then "\n\n" + $summary else "" end))}} ]
+     + (if ($r | length) > 0 then
+          ([ cell("*Issue*"), cell("*Number*") ]
+           + [ $r[] | (.[0] | esc) as $name | ((.[1] // "") | sub(".*/"; "")) as $n
+               | cell($name),
+                 cell(if (.[1] // "") != "" then "<" + .[1] + "|#" + $n + ">" else "-" end) ])
+          | [ range(0; length; 10) as $i | .[$i:$i+10] ]
+          | map({type: "section", fields: .})
+        else [] end)
+     + (if ($all | length) > 100 then [ {type: "context", elements: [cell("and " + (($all | length) - 100 | tostring) + " more, see the run")]} ] else [] end)
+     + (if $link != "" then [ {type: "context", elements: [cell($link)]} ] else [] end))')
+
+if [ "${PRINT_ONLY:-}" = "1" ]; then
+  printf '%s\n\n--- blocks ---\n%s\n' "$plain" "$(jq -c . <<< "$blocks")"; exit 0
+fi
 if [ -z "${SLACK_WEBHOOK_URL:-}" ]; then
   echo "Slack not configured (missing SLACK_WEBHOOK_URL secret); skipping."; exit 0
 fi
-curl -sS -X POST "$SLACK_WEBHOOK_URL" -H "Content-type: application/json; charset=utf-8" \
-  --data "$(jq -n --arg text "$text" '{text: $text}')"
+payload=$(jq -n --arg text "$plain" --argjson blocks "$blocks" '{text: $text, blocks: $blocks}')
+resp=$(curl -sS -X POST "$SLACK_WEBHOOK_URL" -H "Content-type: application/json; charset=utf-8" --data "$payload" || true)
+echo "$resp"
+if [ "$resp" != "ok" ]; then
+  # Blocks rejected (invalid_blocks and the like): still deliver the text.
+  echo "::warning::Slack rejected the formatted message ('$resp'); resending as plain text."
+  curl -sS -X POST "$SLACK_WEBHOOK_URL" -H "Content-type: application/json; charset=utf-8" \
+    --data "$(jq -n --arg text "$plain" '{text: $text}')"
+fi
