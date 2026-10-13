@@ -132,6 +132,10 @@ To use IAM authentication instead of basic username/password, ensure the IAM rol
 The connector automatically detects whether your Redshift endpoint is Provisioned or Serverless based on the hostname pattern and uses the appropriate API for credential retrieval.
 </Note>
 
+## Datashare Databases
+
+On a consumer cluster, OpenMetadata also ingests databases created from a datashare. The connector identifies these non-local databases and reads their schemas, tables, columns, and descriptions through Redshift's cross-database catalog views. No additional configuration is required.
+
 ## Metadata Ingestion
 
 To ingest metadata from Redshift, you need to create a service connection. The service connects Redshift with OpenMetadata. Once you create a service, OpenMetadata automatically starts ingesting metadata.
