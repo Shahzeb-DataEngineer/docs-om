@@ -41,7 +41,7 @@ OpenMetadata currently supports the following table level test types:
 - Table Row Count to be Between: Define the Min. and Max.
 - Table Row Count to Equal: Define a number.
 - Table Row Inserted Count to be Between: Define the Min. and Max. row count. This test will work for columns whose values are of the type Timestamp, Date, and Date Time field. Specify the range type in terms of Hour, Day, Month, or Year. Define the interval based on the range type selected.
-- Compare 2 Tables for Differences: Compare 2 tables for differences. Allows a user to check for integrity.
+- Compare 2 Tables for Differences: Compare 2 tables for differences. Checks integrity between the two tables.
 
 <img src="/public/images/v2.1.x-SNAPSHOT/how-to-guides/quality/test4.png" alt="Configure a Table Level Test" />
 
@@ -104,7 +104,7 @@ Keep **Show Hint** on to read each field description in the **Form Hint** panel.
 
 How the threshold is applied depends on the test:
 - **Row-level tests** count the rows that break the rule. They fail when that count, or its share of the evaluated rows, is above the threshold.
-- **Statistical tests**: the threshold widens the accepted bounds, so small deviations don't fail the test.
+- **Statistical tests** widen the accepted bounds by the threshold, so small deviations don't fail the test.
 
 If you enter an invalid value, such as a negative threshold, OpenMetadata rejects the test case with an error when you save it.
 
