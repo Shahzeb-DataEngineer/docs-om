@@ -52,7 +52,11 @@ n=0
 for dir in "${chunks[@]}"; do
   [ -d "$dir" ] || continue
   n=$((n + 1))
-  files=$(ls "$dir"/index.md "$dir"/areas.md "$dir"/bundle-*.md 2>/dev/null | paste -sd' ' -)
+  # `ls` exits non-zero for any missing name (an index-only chunk has no
+  # bundles; areas.md exists only once the release tracker lists areas), which
+  # would end this script under `set -e` with pipefail, so tolerate it.
+  files=$({ ls "$dir"/index.md "$dir"/bundle-*.md 2>/dev/null || true; } | paste -sd' ' -)
+  [ -f "$dir/areas.md" ] && files="$files $dir/areas.md"
   count=$(cat "$dir/count")
   prompt="$NOTE
 Session $n of $total. Candidates in this session: $count (every [candidate] line in index.md).
