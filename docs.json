@@ -1604,7 +1604,9 @@
                       "v2.0.x/how-to-guides/data-quality-observability/alerts-notifications/slack-alerts-configuration",
                       "v2.0.x/how-to-guides/data-quality-observability/alerts-notifications/microsoft-teams-alerts-configuration",
                       "v2.0.x/how-to-guides/data-quality-observability/alerts-notifications/google-chat-alerts-configuration",
-                      "v2.0.x/how-to-guides/data-quality-observability/alerts-notifications/generic-webhook-alerts-configuration"
+                      "v2.0.x/how-to-guides/data-quality-observability/alerts-notifications/generic-webhook-alerts-configuration",
+                      "v2.0.x/how-to-guides/data-quality-observability/alerts-notifications/alert-behavior-reference",
+                      "v2.0.x/how-to-guides/data-quality-observability/alerts-notifications/webhook-payloads-and-delivery"
                     ]
                   },
                   {
@@ -1715,9 +1717,11 @@
                     "group": "Ontology",
                     "pages": [
                       "v2.0.x/how-to-guides/data-governance/ontology/index",
-                      "v2.0.x/how-to-guides/data-governance/ontology/relationship-types"
+                      "v2.0.x/how-to-guides/data-governance/ontology/relationship-types",
+                      "v2.0.x/how-to-guides/data-governance/ontology/import"
                     ]
                   },
+                  "v2.0.x/how-to-guides/data-governance/intake-forms",
                   "v2.0.x/how-to-guides/data-governance/metrics",
                   "v2.0.x/how-to-guides/data-governance/column-bulk-operations"
                 ]
@@ -2388,6 +2392,24 @@
                       "v2.0.x/api-reference/data-quality/test-suites/versions"
                     ]
                   }
+                ]
+              },
+              {
+                "group": "Alerts",
+                "pages": [
+                  "v2.0.x/api-reference/alerts",
+                  "v2.0.x/api-reference/alerts/create",
+                  "v2.0.x/api-reference/alerts/delete",
+                  "v2.0.x/api-reference/alerts/list",
+                  "v2.0.x/api-reference/alerts/update"
+                ]
+              },
+              {
+                "group": "Incidents",
+                "pages": [
+                  "v2.0.x/api-reference/incidents",
+                  "v2.0.x/api-reference/incidents/list",
+                  "v2.0.x/api-reference/incidents/update-status"
                 ]
               },
               {
@@ -5179,6 +5201,7 @@
                           "v2.1.x-SNAPSHOT/connectors/database/dbt/ingest-dbt-tier",
                           "v2.1.x-SNAPSHOT/connectors/database/dbt/ingest-dbt-glossary",
                           "v2.1.x-SNAPSHOT/connectors/database/dbt/ingest-dbt-domain",
+                          "v2.1.x-SNAPSHOT/connectors/database/dbt/ingest-dbt-data-products",
                           "v2.1.x-SNAPSHOT/connectors/database/dbt/ingest-dbt-custom-properties",
                           "v2.1.x-SNAPSHOT/connectors/database/dbt/ingest-dbt-lineage",
                           "v2.1.x-SNAPSHOT/connectors/database/dbt/ingest-dbt-exposures",
@@ -6328,7 +6351,9 @@
                       "v2.1.x-SNAPSHOT/how-to-guides/data-quality-observability/alerts-notifications/slack-alerts-configuration",
                       "v2.1.x-SNAPSHOT/how-to-guides/data-quality-observability/alerts-notifications/microsoft-teams-alerts-configuration",
                       "v2.1.x-SNAPSHOT/how-to-guides/data-quality-observability/alerts-notifications/google-chat-alerts-configuration",
-                      "v2.1.x-SNAPSHOT/how-to-guides/data-quality-observability/alerts-notifications/generic-webhook-alerts-configuration"
+                      "v2.1.x-SNAPSHOT/how-to-guides/data-quality-observability/alerts-notifications/generic-webhook-alerts-configuration",
+                      "v2.1.x-SNAPSHOT/how-to-guides/data-quality-observability/alerts-notifications/alert-behavior-reference",
+                      "v2.1.x-SNAPSHOT/how-to-guides/data-quality-observability/alerts-notifications/webhook-payloads-and-delivery"
                     ]
                   },
                   {
@@ -6442,6 +6467,7 @@
                       "v2.1.x-SNAPSHOT/how-to-guides/data-governance/ontology/relationship-types"
                     ]
                   },
+                  "v2.1.x-SNAPSHOT/how-to-guides/data-governance/intake-forms",
                   "v2.1.x-SNAPSHOT/how-to-guides/data-governance/metrics",
                   "v2.1.x-SNAPSHOT/how-to-guides/data-governance/column-bulk-operations"
                 ]
@@ -7144,6 +7170,24 @@
                       "v2.1.x-SNAPSHOT/api-reference/data-quality/test-suites/versions"
                     ]
                   }
+                ]
+              },
+              {
+                "group": "Alerts",
+                "pages": [
+                  "v2.1.x-SNAPSHOT/api-reference/alerts",
+                  "v2.1.x-SNAPSHOT/api-reference/alerts/create",
+                  "v2.1.x-SNAPSHOT/api-reference/alerts/delete",
+                  "v2.1.x-SNAPSHOT/api-reference/alerts/list",
+                  "v2.1.x-SNAPSHOT/api-reference/alerts/update"
+                ]
+              },
+              {
+                "group": "Incidents",
+                "pages": [
+                  "v2.1.x-SNAPSHOT/api-reference/incidents",
+                  "v2.1.x-SNAPSHOT/api-reference/incidents/list",
+                  "v2.1.x-SNAPSHOT/api-reference/incidents/update-status"
                 ]
               },
               {
