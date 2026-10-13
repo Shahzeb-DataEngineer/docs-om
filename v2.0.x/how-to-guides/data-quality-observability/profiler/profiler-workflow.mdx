@@ -55,7 +55,7 @@ Filter patterns control which databases, schemas, and tables the profiler target
 
 #### Advanced Config
 
-Profiler agents created in the UI default to **Dynamic** sampling instead of scanning all rows. This default has applied since OpenMetadata 1.13. Upgrading keeps your existing sample settings as **Static**, but turns **Randomized Sample** off and removes the deprecated Compute Metrics setting. The default **Metrics** list doesn't include `histogram`, `cardinalityDistribution`, or `system`, among others. Add them to **Metrics** if you use the column distribution charts or system (DML) metrics.
+Profiler agents created in the UI default to **Dynamic** sampling instead of scanning all rows. This default has applied since OpenMetadata 1.13. Upgrading keeps your existing sample settings as **Static**, but turns **Randomized Sample** off and removes the deprecated Compute Metrics setting. The default **Metrics** list doesn't include `histogram`, `cardinalityDistribution`, or `system`, among others. Add them to **Metrics** if you use the column distribution charts or system data manipulation language (DML) metrics.
 
 Configure sampling, execution, and metrics with the following settings.
 
@@ -106,11 +106,11 @@ Select the metrics to compute and how to retrieve them:
 <img src="/public/images/features/ingestion/workflows/profiler/advanced-configuration.png" alt="Advanced profiler configuration" />
 
 ### 3. Schedule and Deploy
-Click **Next** to open the scheduling step.
-1. Select how the profiler runs:
+1. Click **Next** to open the scheduling step.
+2. Select how the profiler runs:
     - **Schedule**: Set a recurring schedule to run the profiler automatically at a fixed interval.
     - **On Demand**: Run the profiler manually whenever needed.
-2. Click **Deploy**.
+3. Click **Deploy**.
 
 ### 4. Updating Profiler setting at the table level
 Once you have created your profiler you can adjust some behavior at the table level by going to the table and clicking on the profiler tab
@@ -187,7 +187,7 @@ This is a sample config for the profiler:
 
 <Steps>
 <Step title="computeTableMetrics">
-**computeTableMetrics**: Option to turn on/off computing table-level metrics. Turn both this and `computeColumnMetrics` off to run the profiler without computing metrics. To collect sample data, use Auto Classification instead.
+**computeTableMetrics**: Option to turn on/off computing table-level metrics. Turn both this and `computeColumnMetrics` off to run the profiler without computing metrics. To collect sample data, use Auto-Classification instead.
 </Step>
 <Step title="computeColumnMetrics">
 **computeColumnMetrics**: Option to turn on/off computing column-level metrics.
