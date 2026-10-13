@@ -41,7 +41,7 @@ SLACK_FILE="${SLACK_FILE:-slack-digest.txt}"
 PREFIXES_JSON=$(jq -cn --arg own "$PREFIX" --arg all "$DEDUP_PREFIXES" '[$own] + ($all | split(" ") | map(select(. != "" and . != $own)))')
 # jq: marker text for one PR or tracking issue, in this repo's style.
 MK='def mk($p; $kind; $r; $n): if $style == "number" then "<!-- \($p):\($kind)-\($n) -->" else "<!-- \($p):\($kind)-\($r)#\($n) -->" end;'
-PREVIEW="$(mktemp)"; SLACK_LINES=()
+PREVIEW="$(mktemp)"; SLACK_LINES=(); DRY_LINES=()
 TMP="$(mktemp -d)"
 
 preview() { printf '%s\n' "$@" >> "$PREVIEW"; }
@@ -192,6 +192,7 @@ ensure_tracker() {
   TRACKER_NUM=$(gh issue create --repo "$REPO" --title "$TRACKER_TITLE" --body-file "$TMP/tracker-stub.md" \
                   --label "$TARGET_VERSION" "${aa[@]}" | grep -oE '[0-9]+$')
   echo "Created tracker #$TRACKER_NUM" >&2
+  SLACK_LINES+=("• *Tracker*: https://github.com/${REPO}/issues/${TRACKER_NUM}")
 }
 
 link_sub_issue() {
@@ -211,7 +212,7 @@ release_flow() {
     area=$(jq -r .area <<< "$item")
     title=$(jq -r .suggested_title <<< "$item")
     breaking=$(jq -r .breaking <<< "$item")
-    tpl="${SUB_TITLE_TEMPLATE:-{title\}}"
+    tpl="${SUB_TITLE_TEMPLATE:-}"; [ -n "$tpl" ] || tpl='{title}'
     tpl="${tpl//\{ver\}/$TARGET_VERSION}"; tpl="${tpl//\{area\}/$area}"
     full_title="${tpl//\{title\}/$title}"
     # Source PRs not yet in the ledger and not carrying a marker anywhere.
@@ -253,6 +254,7 @@ release_flow() {
       remember_issue 0 "$TMP/body.md"
       preview "### Would create sub-issue under $TRACKER_TITLE ($area): $full_title" "" "$(cat "$TMP/body.md")" ""
       printf 'NEWTITLE\t%s\t%s\n' "$area" "$title" >> "$NEW_TITLES"
+      DRY_LINES+=("• [${area}] ${full_title}")
       sub="(new)"
     else
       args=(--repo "$REPO" --title "$full_title" --body-file "$TMP/body.md" --label "$TARGET_VERSION")
@@ -346,6 +348,7 @@ while read -r item; do
   if [ "$DRY_RUN" = "true" ]; then
     remember_issue 0 "$TMP/body.md"
     preview "### Would create: $title" "" "$(cat "$TMP/body.md")" ""
+    DRY_LINES+=("• ${title}")
   else
     args=(--repo "$REPO" --title "$title" --body-file "$TMP/body.md")
     [ "$breaking" = "true" ] && args+=(--label "breaking-change")
@@ -402,9 +405,19 @@ else
   gh issue comment "$digest" --repo "$REPO" --body-file "$TMP/digest.md" > /dev/null
 fi
 
-# ---- 4. Slack text (live runs with writes only) --------------------------
-if [ "$DRY_RUN" != "true" ] && [ "${#SLACK_LINES[@]}" -gt 0 ]; then
-  { echo "*${LABEL_TITLE} Release Watcher*: ${#SLACK_LINES[@]} doc need(s) tracked"; printf '%s\n' "${SLACK_LINES[@]}"; } > "$SLACK_FILE"
+# ---- 4. Report text for the Slack message (every run) --------------------
+# watcher-slack-report.sh posts this file after the run finishes, with the
+# pass or fail status. It lists what was created, or in a dry run what would be.
+if [ "$DRY_RUN" = "true" ]; then
+  if [ "${#DRY_LINES[@]}" -gt 0 ]; then
+    { echo "Dry run, nothing was written. Would create ${#DRY_LINES[@]} issue(s):"; printf '%s\n' "${DRY_LINES[@]}"; } > "$SLACK_FILE"
+  else
+    echo "Dry run, nothing was written. No new issues would be created." > "$SLACK_FILE"
+  fi
+elif [ "${#SLACK_LINES[@]}" -gt 0 ]; then
+  { echo "Issues created or updated (${#SLACK_LINES[@]}):"; printf '%s\n' "${SLACK_LINES[@]}"; } > "$SLACK_FILE"
+else
+  echo "No new issues created." > "$SLACK_FILE"
 fi
 
 if [ "$DRY_RUN" = "true" ] && [ -n "${GITHUB_STEP_SUMMARY:-}" ]; then
