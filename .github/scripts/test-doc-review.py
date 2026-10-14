@@ -165,13 +165,64 @@ class ReviewTests(unittest.TestCase):
 
     def test_oversize_diff_skipped_after_compaction(self):
         # 60 distinct pages: over the 50-file limit, skipped without a model
-        # call, but visibly (a SKIPPED comment carrying a passing Findings line).
+        # call, but visibly (a SKIPPED comment). The skip must NOT fake a
+        # zero-finding Findings line -- an unreviewed PR is not a pass.
         many = "".join(patch(f"d/{i:03d}.mdx", "x " * 5) for i in range(60))
         report, prompts = self._run_runner(many, {"REVIEW_MAX_FILES": "50"})
-        self.assertIn("SKIPPED", report)
+        self.assertIn("**Overall verdict:** SKIPPED", report)
         self.assertIn("skipped: 60 files > 50", report)
-        self.assertIn("Critical=0 Major=0 Minor=0", report)
+        self.assertNotIn("Critical=0 Major=0 Minor=0", report)
+        self.assertNotIn("**Findings**:", report)
         self.assertEqual(prompts, 0)
+
+    def _extract_run(self, workflow, step_name):
+        # Pull a workflow step's run script verbatim, dedented like the runner
+        # executes it. Shared by the gate and validator regressions.
+        source = (SCRIPTS.parent / "workflows" / workflow).read_text()
+        step = source.split(f"      - name: {step_name}\n", 1)[1]
+        run = step.split("        run: |\n", 1)[1]
+        return "\n".join(line[10:] if line.startswith("          ") else line
+                         for line in run.splitlines())
+
+    def test_skipped_report_passes_validators_and_gates(self):
+        # End-to-end: the real SKIPPED report the runner emits must pass both
+        # workflows' report validators AND their findings gates, for automatic
+        # and manual reviews alike. Regression for the oversized-review path
+        # that previously failed "exactly one Overall verdict line".
+        many = "".join(patch(f"d/{i:03d}.mdx", "x " * 5) for i in range(60))
+        report, _ = self._run_runner(many, {"REVIEW_MAX_FILES": "50"})
+        self.assertIn("**Overall verdict:** SKIPPED", report)
+
+        for workflow in ("doc-review-auto.yml", "doc-review.yml"):
+            with self.subTest(workflow=workflow, stage="validator"):
+                script = self._extract_run(workflow, "Clean Up Prior Review Comments")
+                start = script.index("<<'PY'\n") + len("<<'PY'\n")
+                program = script[start:script.index("\nPY", start)]
+                with tempfile.TemporaryDirectory() as directory:
+                    report_path = Path(directory) / "report.md"
+                    report_path.write_text(report)
+                    result = subprocess.run(
+                        [sys.executable, "-c", program, str(report_path)],
+                        env=dict(os.environ, REQUIRE_COUNTS="1", VERDICT_POLICY="new"),
+                        text=True, capture_output=True)
+                    self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+
+            with self.subTest(workflow=workflow, stage="gate"):
+                gate = self._extract_run(workflow, "Fail on Critical or Excess Major Findings")
+                with tempfile.TemporaryDirectory() as directory:
+                    cli = Path(directory) / "gh"
+                    cli.write_text(
+                        "#!" + sys.executable + "\n"
+                        "import os, sys\n"
+                        "assert sys.argv[1:] == ['api', 'repos/example/docs/issues/comments/123', '--jq', '.body']\n"
+                        "print(os.environ['MOCK_REPORT'])\n"
+                    )
+                    cli.chmod(0o755)
+                    result = subprocess.run(
+                        ["bash", "-c", gate], text=True, capture_output=True,
+                        env=dict(os.environ, PATH=directory + os.pathsep + os.environ["PATH"],
+                                 COMMENT_ID="123", GITHUB_REPOSITORY="example/docs", MOCK_REPORT=report))
+                    self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
 
     def test_version_copies_collapse_under_limit(self):
         # 20 pages x 3 version trees = 60 raw files, but identical copies

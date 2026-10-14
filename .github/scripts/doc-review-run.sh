@@ -354,7 +354,7 @@ else
       echo
       echo "**Reviewed revision**: ${HEAD_SHA:0:7}"
       echo
-      echo "**Findings**: \`Critical=0 Major=0 Minor=0\`"
+      echo "_Automated review skipped because the PR exceeds the size limit. This is not a pass: no findings were assessed._"
       echo
       echo "<!-- doc-review-footer -->"
       echo "<sub>[View job](${RUN_URL}) · skipped: ${changed_after_compaction} files > ${REVIEW_MAX_FILES:-50}</sub>"

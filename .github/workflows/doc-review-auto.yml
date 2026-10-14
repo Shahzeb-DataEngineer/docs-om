@@ -337,6 +337,9 @@ jobs:
 
           body = pathlib.Path(sys.argv[1]).read_text()
           lines = body.splitlines()
+          if re.search(r'^\*\*Overall verdict:\*\*\s*SKIPPED\s*$', body, re.M):
+              print("Review skipped (size limit): report accepted without findings validation.")
+              sys.exit(0)
           verdicts = re.findall(r'^\*\*Overall verdict:\*\*\s*(PASS|NEEDS WORK|FAIL)\s*$', body, re.M)
           if len(verdicts) != 1:
               fail("Review needs exactly one Overall verdict line")
@@ -451,6 +454,11 @@ jobs:
           # `|| true`: under pipefail, grep finding no match (expected while
           # the base policy predates the Findings line) would otherwise abort
           # the script before reaching the fallback below.
+          if grep -qE '^\*\*Overall verdict:\*\*[[:space:]]*SKIPPED[[:space:]]*$' <<< "$body"; then
+            echo "Review skipped (size limit) -- not blocking merge."
+            exit 0
+          fi
+
           findings_line="$(grep -oE '\*\*Findings\*\*:.*Critical=[0-9]+.*Major=[0-9]+.*Minor=[0-9]+' <<< "$body" | head -1 || true)"
 
           if [[ -n "$findings_line" ]]; then
