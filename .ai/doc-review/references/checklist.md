@@ -4,7 +4,7 @@ Review only changed user-facing content. Report only rules below, group repeated
 
 **Critical** = technical errors, contradictions, safety/accessibility risks, discriminatory language, or wrong branding. **Major** = essential terminology, grammar, heading structure, prerequisites, procedure clarity, or explicitly tagged formatting rules. **Minor** = other style, formatting, and editorial polish. **Exception: not flagged** = never report.
 
-## Category 1: Voice & Tone
+## Category 1: Voice and Tone
 
 - [ ] **Clear technical voice** (Minor) — Be direct and neutral; avoid promotional language and first-person product voice (“we,” “us,” “our”).
 
@@ -15,7 +15,7 @@ Review only changed user-facing content. Report only rules below, group repeated
 - [ ] **Plain wording** (Minor) — Avoid corporate filler and Latin abbreviations: use “use,” “start,” “for example,” “that is,” and “and so on.”
 - [ ] **Short sentences** (Minor) — Split sentences with more than two commas plus end punctuation.
 
-## Category 3: Grammar & Instructions
+## Category 3: Grammar and Instructions
 
 - [ ] **Usable language** (Major) — Use correct grammar, direct imperatives for instructions, and active voice when it prevents ambiguity.
 - [ ] **Purposeful passive voice** (Exception: not flagged) — Passive voice is acceptable when the actor is unknown, obvious, or unimportant.
@@ -32,7 +32,7 @@ Review only changed user-facing content. Report only rules below, group repeated
 - [ ] **Restrained punctuation** (Minor) — Avoid unnecessary em dashes, semicolons, exclamation marks, scare quotes, and prose ampersands; use en dashes for ranges.
 - [ ] **Correct hyphens and quotes** (Minor) — Hyphenate compound modifiers before nouns, not after “-ly”; place periods/commas inside quotes and colons/semicolons outside.
 
-## Category 5: Names & Headings
+## Category 5: Names and Headings
 
 - [ ] **Official names are exact** (Major) — Preserve verified names and capitalization; spell “OpenMetadata” correctly.
 - [ ] **Title-case headings** (Critical) — Capitalize major words in headings.
@@ -88,7 +88,7 @@ Review only changed user-facing content. Report only rules below, group repeated
 - [ ] **Global meaning is clear** (Minor) — Avoid culture-specific assumptions and clarify dates, time zones, and units when ambiguous.
 - [ ] **Translation-friendly prose** (Minor) — Avoid idioms, humor, wordplay, noun stacks, and list items completing sentence fragments; aim for UI strings under 80 characters.
 
-## Category 12: Technical & Logical Accuracy
+## Category 12: Technical and Logical Accuracy
 
 - [ ] **No technical errors** (Critical) — Code, commands, schemas, APIs, configuration, navigation instructions, and expected behavior must work with the available PR evidence. Link validity belongs to automated link checks.
 - [ ] **Claims are internally consistent** (Critical) — Check names, counts, versions, fields, defaults, availability, examples, and the PR description for contradictions.
