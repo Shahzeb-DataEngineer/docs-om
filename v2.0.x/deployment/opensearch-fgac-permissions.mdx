@@ -63,8 +63,8 @@ until the migration cleanup has removed the old ISM policies.
 
 ## Index-level operations
 
-All data operations run against the index patterns above and need no extra
-cluster privilege: search, multi-get, document get/index/update/delete, bulk,
+All operations run against the index patterns above and need no extra
+cluster privilege: index creation, search, multi-get, document get/index/update/delete, bulk,
 delete-by-query, update-by-query, reindex, force merge, index settings and
 mapping updates, alias management, and data-stream create/delete/get/rollover.
 
@@ -88,6 +88,7 @@ with `clusterAlias: openmetadata`. Adjust the prefix to match your configuration
       "index_patterns": ["openmetadata_*", "openmetadata-di-*"],
       "allowed_actions": [
         "crud",
+        "create_index",
         "indices:data/write/bulk*",
         "indices:data/write/delete_by_query",
         "indices:data/write/update_by_query",
