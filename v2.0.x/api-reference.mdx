@@ -86,10 +86,14 @@ metadata = OpenMetadata(server_config)
 # List tables
 tables = metadata.list_all_entities(entity=Table)
 for table in tables:
-    print(f"{table.fullyQualifiedName}: {table.description}")
+    print(f"{table.fullyQualifiedName.root}: {getattr(table.description, 'root', table.description)}")
 ```
 
 ```java Java
+import org.openmetadata.sdk.client.OpenMetadataClient;
+import org.openmetadata.sdk.config.OpenMetadataConfig;
+import org.openmetadata.sdk.models.ListParams;
+
 // Configure connection
 OpenMetadataConfig config = OpenMetadataConfig.builder()
     .serverUrl("https://your-company.open-metadata.org/api")
@@ -99,9 +103,8 @@ OpenMetadataConfig config = OpenMetadataConfig.builder()
 OpenMetadataClient client = new OpenMetadataClient(config);
 
 // List tables
-TablesApi tablesApi = client.buildClient(TablesApi.class);
-TableList tables = tablesApi.listTables(null, 10, null, null, null);
-for (Table table : tables.getData()) {
+var tables = client.tables().list(new ListParams().setLimit(10));
+for (var table : tables.getData()) {
     System.out.println(table.getFullyQualifiedName());
 }
 ```
@@ -158,6 +161,9 @@ The API uses conventional HTTP response codes:
   </Card>
   <Card title="Discovery" icon="magnifying-glass" href="/v2.0.x/api-reference/discovery">
     Search and discover metadata across your catalog.
+  </Card>
+  <Card title="Lineage" icon="diagram-project" href="/v2.0.x/api-reference/lineage/index">
+    Query, create, delete, and export lineage. Send OpenLineage events individually or in batches.
   </Card>
   <Card title="Data Contracts" icon="file-contract" href="/v2.0.x/api-reference/data-contracts">
     Define and validate data contracts for your assets.
